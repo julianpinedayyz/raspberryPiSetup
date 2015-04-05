@@ -100,6 +100,16 @@ At this point is probably a good idea to update and upgrade the system.  Run the
 	sudo apt-get update
 	sudo apt-get upgrade
 	
+##Install screen
+
+If we exit our SSH session while there's a long build happening, then the build will stop causing some breakage.  We don't want that.  We can solve that problem with screen.  Screen will let you run long builds and resume later when you SSH again to your Pi.  Is like running task in the background of your Pi.  After isnatilling it, you could run the node.js installation using screen.  Here are the steps:
+
+1. Run `sudo apt-get install screen`
+2. After the installation, run `screen` to start a screen session.  You'll get a new terminal window.  From that terminal window you can run the node.js installation bellow and forget about broken pipes.
+
+If you want to SSH again and resume your session, you just need to run `screen -r`. After the proceess has ended, you can exit the session and terminate it just by typing `exit`.  Ypou can have multiple sessions and terminate them.  You can find more info about that [here](http://www.tecmint.com/screen-command-examples-to-manage-linux-terminals/).
+	
+
 ##Install node.js (latest version 04/04/2015)
 After trying many tutorials, I have found that this is the most reliable way to install node.js on the pi.  You can also follow [this tutorial](http://elinux.org/Node.js_on_RPi).
 
@@ -138,6 +148,32 @@ After trying many tutorials, I have found that this is the most reliable way to 
 At this point I like to back up my SD Card and save an image I can re-use at any time.  If using the same image on another Pi, have in mind that you should change the host name running `sudo raspi-config`.
 
 Again, I use [ApplePi-Baker](http://www.tweaking4all.com/downloads/raspberrypi/ApplePi-Baker-1.5.1.zip) to flash my SD cards and copy my backup image to them.  The third recipe is meant for backing up your image.
+
+##SHHD Disable Password login
+
+Now that I can login with my private key, I want to ONLY login with it.  If you want the same, follow the next steps:
+
+1. Run `sudo nano /etc/ssh/sshd_config`
+2. Change `PermitRootLogin yes` to `PermitRootLogin no`
+3. Look for `PasswordAuthentication yes` It should be commented.  Uncomment it and change the value to NO.  Like this `PasswordAuthentication no` 
+
+I like commenting the lines I'll be changing and creating a new one with my changes in case I want to rever.  My file looks like this:
+
+	#Disable Password login
+	#PermitRootLogin yes
+	PermitRootLogin no
+	.
+	.
+	.
+	# Change to no to disable tunnelled clear text password 
+	#Disable Password logins
+	#PasswordAuthentication yes
+	PasswordAuthentication no
+	
+I like it ;)
+
+
+
 
 ###More to come...
 
