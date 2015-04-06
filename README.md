@@ -100,7 +100,89 @@ At this point is probably a good idea to update and upgrade the system.  Run the
 	sudo apt-get update
 	sudo apt-get upgrade
 	
-##Install screen
+##Rpi-update first time: install git and certifications for reach github.
+
+	sudo apt-get install ca-certificates
+	sudo apt-get install git-core
+	sudo wget http://goo.gl/1BOfJ -O /usr/bin/rpi-update
+	sudo chmod +x /usr/bin/rpi-update
+	
+##Update firmware
+
+	sudo rpi-update
+	sudo ldconfig
+	sudo reboot
+	
+##Rpi-update after
+
+	sudo rpi-update
+	sudo ldconfig
+	sudo reboot
+
+##Unattended-upgrades (Optional)
+
+The `unattended-upgrades` package is the way to automate updating the OS in these debian-family distributions.  Follow these instructions:
+
+1. Install the package:
+
+	````
+	sudo apt-get install unattended-upgrades
+	````
+	
+2. Create the file:
+
+	````
+	sudo nano /etc/apt/apt.conf.d/10periodic
+	````
+
+3. Add these lines to the file and save:
+
+	````
+	APT::Periodic::Update-Package-Lists "1";
+	APT::Periodic::Download-Upgradeable-Packages "1";
+	APT::Periodic::AutocleanInterval "7";
+	APT::Periodic::Unattended-Upgrade "1";
+	````
+	The above configuration updates the package list, downloads, and installs available upgrades every day. The local download archive is cleaned every week.
+	
+	The results of unattended-upgrades will be logged to `/var/log/unattended-upgrades`
+	 
+	
+##Install apticron (Optional)
+
+To follow this step you need to install SSMTP first.  [Follow this tutorial](http://iqjar.com/jar/sending-emails-from-the-raspberry-pi/)
+
+apticron will configure a cron job to email an administrator information about any packages on the system that have updates available, as well as a summary of changes in each package.
+
+To install it run:
+
+	sudo apt-get install apticron
+
+Configure it to send you messages:
+
+	sudo nano /etc/apticron/apticron.conf
+	EMAIL="root@example.com"
+	
+Configure it to run once a week: [Follow these steps](http://www.sysadminworld.com/2012/how-to-run-apticron-only-once-a-week/). This [link](http://www.cyberciti.biz/faq/how-do-i-add-jobs-to-cron-under-linux-or-unix-oses/) is also useful to know more about cron jobs.
+
+Test it:
+
+	sudo apticron
+	
+Some things that you will find on the message if there's an update:
+
+You can perform the upgrade by issuing the command:
+
+	aptitude dist-upgrade
+	
+The upgrade may be simulated by issuing the command:
+
+	aptitude -s -y dist-upgrade
+	
+Useful stuff.
+
+
+##Install screen (Optional but really useful)
 
 If we exit our SSH session while there's a long build happening, then the build will stop causing some breakage.  We don't want that.  We can solve that problem with screen.  Screen will let you run long builds and resume later when you SSH again to your Pi.  Is like running task in the background of your Pi.  After isnatilling it, you could run the node.js installation using screen.  Here are the steps:
 
@@ -171,6 +253,147 @@ I like commenting the lines I'll be changing and creating a new one with my chan
 	PasswordAuthentication no
 	
 I like it ;)
+
+##Update Git to the latest version
+
+	 sudo nano /etc/apt/sources.list
+
+Add this line at the end of the file:
+
+	deb http://http.debian.net/debian wheezy-backports main
+	
+Run `sudo apt-get update`.  You should get an error saying theres a missing key.  Something like this: 
+
+	W: GPG error: http://mozilla.debian.net  ......   : NO_PUBKEY 85A3D26506C4AE2A
+	
+Copy the public key number and run this making sure to replace yours with the one of this example:
+
+	gpg --keyserver pgpkeys.mit.edu --recv-key 85A3D26506C4AE2A
+	gpg -a --export 85A3D26506C4AE2A | sudo apt-key add -
+	
+run `sudo apt-get update` again. Now you shouldn't get an error.
+
+Now run:
+
+	sudo apt-get -t wheezy-backports install git
+	
+That should do the trick.  You should be running the latest git for your version of Linux (Debian) After upgrading, I like to comment the source that I added to the source.list file just because the versions you get from backports sometimes are not stable.
+
+	sudo reboot
+
+
+##Install Watchdog
+
+Its purpose is to automatically restart RPi if it becomes unresponsive.
+
+	sudo apt-get install watchdog
+	sudo modprobe bcm2708_wdog
+	
+Edit modules file:
+
+	sudo nano /etc/modules
+	##add the line bellow to the end of the file
+	bcm2708_wdog
+	
+Add watchdog to startup applications:
+
+	sudo update-rc.d watchdog defaults
+	
+edit watchdog config file
+
+	sudo nano /etc/watchdog.conf
+	
+	#uncomment the following:
+	max-load-1
+	watchdog-device
+
+Restart watchdog with:
+	
+	sudo service watchdog restart
+	
+You can also run these commands to check its status, stop it and start it:
+
+	sudo service watchdog status
+	sudo service watchdog stop
+	sudo service watchdog start
+	
+##Install nginx
+
+	sudo apt-get install nginx
+	
+Make sure to start the service and try to see something via network
+
+	sudo service nginx start
+	
+Go to the IP address of your Pi on a browser (In my case http://192.168.1.116/) and you will see the Nginx Welcome message "Welcome to nginx!"
+
+##Configure nginx for node.js hosting
+
+Create a site for your domain (example uses `nodeLab` for a name)
+
+	sudo nano /etc/nginx/sites-available/nodeLab
+	
+This is where we configure nginx to send any requests to the node js app later on.
+
+Insert the following content into the file. We will have nginx deliver existing files right away, everything else will be sent to node.
+
+Change `nodeLab` for the domain that suits your needs.
+
+	# the IP(s) on which your node server is running. I chose port 3000.
+	upstream app_nodeLab {
+    	server 127.0.0.1:3000;
+    	keepalive 8;
+	}
+
+	# the nginx server instance
+	server {
+	    listen 80;
+	    server_name nodeLab.pi nodeLab;
+	    access_log /var/log/nginx/nodeLab.log;
+	    root  /home/pi/nodeLab/app;
+	    index index.html;
+	    charset utf8;
+	    sendfile off;
+	
+	    # pass the request to the node.js server with the correct headers
+	    # and much more can be added, see nginx config options
+	    location / {
+	      proxy_set_header X-Real-IP $remote_addr;
+	      proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+	      proxy_set_header Host $http_host;
+	      proxy_set_header X-NginX-Proxy true;
+	      proxy_redirect off;
+	
+	        # these are denied
+	        location ~ \.(php|inc|conf|bak|tmp|htaccess|htpasswd)$ {
+	            deny all;
+	            break;
+	        }
+	        # serve existing files, put everything else to node
+	        if (!-f $request_filename) {
+	            proxy_pass http://app_nodeLab;
+	            break;
+	        }
+	    }
+	 }
+
+Now enable the site
+
+	cd /etc/nginx/sites-enabled/
+	sudo ln -s /etc/nginx/sites-available/nodeLab nodeLab
+
+Restart nginx
+
+	sudo service nginx restart
+	
+At this point if you create a simple node project you will be able to see it on your Pi IP address on port 3000.
+
+Double check that there's only one enabed site (in this case nodeLab) on your `sites-enabled` folder.  If for any reason there's a `default` site in that folder, nginx will serve that default site on port 80 and your `nodeLab` site on port 3000.  If you delete the default site, nginx will forward port 3000 to port 80 and you will be able to see your app just by typing your IP address without the port.  This comes useful if you want to later forward a public IP address to your app and make it public.
+
+##Install Mongodb without building it
+
+You can follow [this tutorial](http://blog.rongzou.us/?p=118).  And here are a couple of links that will help you solve issues if you have them.  [This one](http://stackoverflow.com/questions/12831939/couldnt-connect-to-server-127-0-0-127017) and [this one](https://ni-c.github.io/heimcontrol.js/get-started.html).
+
 
 
 
