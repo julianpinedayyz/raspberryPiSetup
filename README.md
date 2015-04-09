@@ -1,7 +1,7 @@
 # raspberryPiSetup
-Initial setup and steps to get a respberry pi up and running.
+Initial setup and steps to get a raspberry pi up and running.
 
-After repeating all these steps over and over, I decide to make this repo and have all the steps clear so anyone can repeat then and get their rasberry pi up and running.  I will be seting up a MEAN environmnet using Nginx and some other tools to make life easier.
+After repeating all these steps over and over, I decide to make this repo and have all the steps clear so anyone can repeat then and get their raspberry pi up and running.  I will be setting up a MEAN environment using Nginx and some other tools to make life easier.  The hole purpose 
 
 ##Setup SD Card with Raspbian
 
@@ -24,18 +24,18 @@ After many tries, I found the best solution is to flash the SD Card and copy a R
 After the OS gets installed, the Pi will reboot and load raspi-config for the first time.  These are the steps that I normally follow:
 
 1. Expand Filesystem (Just in case)
-2. Chande Internationalisation Options to suit my needs:
+2. Change Internationalization Options to suit my needs:
 	+ Change Locale.
   	+ Change Timezone.
 3. Enable SSH access.
-4. Change the hostmane
+4. Change the hostname
 5. Enable SPI (if you have an Adafruit TFT)
 
 Select Finish and let the Pi reboot.
 
 ##Find the Pi IP address
 
-After rebooting, find the ip of your Pi by rennuing `ifconfig`.  Look for this line `inet addr:192.168.1.116`.  In this case, my IP is 192.168.1.116.  Now I want to set that as a static IP for my Pi.  This step can also be done in the router config.  I do it in both places (router and pi) just to be safe.
+After rebooting, find the ip of your Pi by running `ifconfig`.  Look for this line `inet addr:192.168.1.116`.  In this case, my IP is 192.168.1.116.  Now I want to set that as a static IP for my Pi.  This step can also be done in the router config.  I do it in both places (router and pi) just to be safe.
 
 ##Enable SSH Without password (Public Key)
 
@@ -184,12 +184,12 @@ Useful stuff.
 
 ##Install screen (Optional but really useful)
 
-If we exit our SSH session while there's a long build happening, then the build will stop causing some breakage.  We don't want that.  We can solve that problem with screen.  Screen will let you run long builds and resume later when you SSH again to your Pi.  Is like running task in the background of your Pi.  After isnatilling it, you could run the node.js installation using screen.  Here are the steps:
+If we exit our SSH session while there's a long build happening, then the build will stop causing some breakage.  We don't want that.  We can solve that problem with screen.  Screen will let you run long builds and resume later when you SSH again to your Pi.  Is like running task in the background of your Pi.  After installing it, you could run the node.js installation using screen.  Here are the steps:
 
 1. Run `sudo apt-get install screen`
 2. After the installation, run `screen` to start a screen session.  You'll get a new terminal window.  From that terminal window you can run the node.js installation bellow and forget about broken pipes.
 
-If you want to SSH again and resume your session, you just need to run `screen -r`. After the proceess has ended, you can exit the session and terminate it just by typing `exit`.  Ypou can have multiple sessions and terminate them.  You can find more info about that [here](http://www.tecmint.com/screen-command-examples-to-manage-linux-terminals/).
+If you want to SSH again and resume your session, you just need to run `screen -r`. After the process has ended, you can exit the session and terminate it just by typing `exit`.  You can have multiple sessions and terminate them.  You can find more info about that [here](http://www.tecmint.com/screen-command-examples-to-manage-linux-terminals/).
 	
 
 ##Install node.js (latest version 04/04/2015)
@@ -200,7 +200,7 @@ After trying many tutorials, I have found that this is the most reliable way to 
 	````
 	nano install-node.sh
 	````
-2. Paste the code bellow (change node version if needed.  I'm installing the latest)
+2. Paste the code bellow (change node version if needed.  I'm installing the latest as of this date)
 	
 	````
 	wget http://nodejs.org/dist/v0.12.2/node-v0.12.2.tar.gz
@@ -226,7 +226,7 @@ After trying many tutorials, I have found that this is the most reliable way to 
 	npm -v										# Should print 2.7.4
 	````
 	
-At this point you should be able to test the node server.  Download the `nodeLab` folder from this repo and place it on your home folder `/home/pi/nodeLab`. CD into your nodeLab folder and run `node server.js` (You need to install all the required `npm` packages first.)  You should see something like this on your promp:
+At this point you should be able to test the node server.  Download the `nodeLab` folder from this repo and place it on your home folder `/home/pi/nodeLab`. CD into your nodeLab folder and run `node server.js` (You need to install all the required `npm` packages first.)  You should see something like this on your prompt:
 
 	Simple static server listening on port 3000
 	
@@ -243,7 +243,7 @@ Now that I can login with my private key, I want to ONLY login with it.  If you 
 2. Change `PermitRootLogin yes` to `PermitRootLogin no`
 3. Look for `PasswordAuthentication yes` It should be commented.  Uncomment it and change the value to NO.  Like this `PasswordAuthentication no` 
 
-I like commenting the lines I'll be changing and creating a new one with my changes in case I want to rever.  My file looks like this:
+I like commenting the lines I'll be changing and creating a new one with my changes in case I want to revert.  My file looks like this:
 
 	#Disable Password login
 	#PermitRootLogin yes
@@ -288,7 +288,7 @@ That should do the trick.  You should be running the latest git for your version
 
 ##Install Watchdog
 
-Its purpose is to automatically restart RPi if it becomes unresponsive.
+Its purpose is to automatically restart the raspberry pi if it becomes unresponsive.
 
 	sudo apt-get install watchdog
 	sudo modprobe bcm2708_wdog
@@ -337,7 +337,7 @@ Create a site for your domain (example uses `nodeLab` for a name)
 
 	sudo nano /etc/nginx/sites-available/nodeLab
 	
-This is where we configure nginx to send any requests to the node js app later on.
+This is where we configure nginx to send any requests to the node.js app later on.
 
 Insert the following content into the file. We will have nginx deliver existing files right away, everything else will be sent to node.
 
@@ -392,7 +392,7 @@ Restart nginx
 	
 At this point if you create a simple node project you will be able to see it on your Pi IP address on port 3000.
 
-Double check that there's only one enabed site (in this case nodeLab) on your `sites-enabled` folder.  If for any reason there's a `default` site in that folder, nginx will serve that default site on port 80 and your `nodeLab` site on port 3000.  If you delete the default site, nginx will forward port 3000 to port 80 and you will be able to see your app just by typing your IP address without the port.  This comes useful if you want to later forward a public IP address to your app and make it public.
+Double check that there's only one enabled site (in this case nodeLab) on your `sites-enabled` folder.  If for any reason there's a `default` site in that folder, nginx will serve that default site on port 80 and your `nodeLab` site on port 3000.  If you delete the default site, nginx will forward port 3000 to port 80 and you will be able to see your app just by typing your IP address without the port.  This comes useful if you want to later forward a public IP address to your app and make it public.
 
 ##Install Mongodb without building it
 
