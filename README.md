@@ -226,6 +226,10 @@ After trying many tutorials, I have found that this is the most reliable way to 
 	npm -v										# Should print 2.7.4
 	````
 	
+At this point you should be able to test the node server.  Download the `nodeLab` folder from this repo and place it on your home folder `/home/pi/nodeLab`. CD into your nodeLab folder and run `node server.js` (You need to install all the required `npm` packages first.)  You should see something like this on your promp:
+
+	Simple static server listening on port 3000
+	
 ##Backup your SD Card
 At this point I like to back up my SD Card and save an image I can re-use at any time.  If using the same image on another Pi, have in mind that you should change the host name running `sudo raspi-config`.
 
