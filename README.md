@@ -118,6 +118,9 @@ At this point is probably a good idea to update and upgrade the system.  Run the
 	sudo rpi-update
 	sudo ldconfig
 	sudo reboot
+	
+##Overclock your Pi
+Follow [This tutorial](http://haydenjames.io/raspberry-pi-2-overclock/) 
 
 ##Unattended-upgrades (Optional)
 
