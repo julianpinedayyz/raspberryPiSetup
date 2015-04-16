@@ -427,12 +427,27 @@ Because I have been running into some issues with Mongo, I decided to write a sm
 
 	sudo apt-get install zsh
 	wget https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh -O - | sh
+	chsh -s $(which zsh)
 	sudo reboot
 
-After that zsh and oh-my-zsh should be up and running.  You can customize it however you like.  I added a simple template I created for mine to this repo.
+After that zsh and oh-my-zsh should be up and running.  You can customize it however you like.  I added a simple template I created for mine to this repo. If you want to use it, just follow these steps:
 
+	cd ~/.oh-my-zsh/themes/
+	wget https://raw.githubusercontent.com/miroamarillo/raspberryPiSetup/master/miroamarillo.zsh-theme
 
+Activate the theme:
 
+	nano ~/.zshrc
+
+Find the line ZSH_THEME="..." and change it for
+	
+	ZSH_THEME="miroamarillo"
+	
+Done.  You should be running the new theme by now.
+
+##SSH Welcome banner (Optional)
+
+I like ti have a welcome banner on my pi.  I uploaded mine to this repo.  Feel free to use it. It is based on ZSH. It won't work with bash.
 
 
 
