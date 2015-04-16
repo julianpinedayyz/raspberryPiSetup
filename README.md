@@ -401,6 +401,38 @@ Double check that there's only one enabled site (in this case nodeLab) on your `
 
 You can follow [this tutorial](http://blog.rongzou.us/?p=118).  And here are a couple of links that will help you solve issues if you have them.  [This one](http://stackoverflow.com/questions/12831939/couldnt-connect-to-server-127-0-0-127017) and [this one](https://ni-c.github.io/heimcontrol.js/get-started.html).
 
+Because I have been running into some issues with Mongo, I decided to write a small bash script to repair it:
+
+1. Create repair-mongo.sh on your home folder:
+
+	````
+	nano repair-mongo.sh
+	````
+2. Paste these commands:
+
+	````
+	sudo service mongodb stop
+	sudo rm /var/lib/mongodb/mongod.lock
+	sudo mongod --repair
+	sudo service mongodb start
+	sudo service mongodb status
+	````
+3. Run it:
+
+	````
+	sudo sh repair-mongo.sh
+	````
+
+##Install zsh and oh-my-zsh (Optional)
+
+	sudo apt-get install zsh
+	wget https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh -O - | sh
+	sudo reboot
+
+After that zsh and oh-my-zsh should be up and running.  You can customize it however you like.  I added a simple template I created for mine to this repo.
+
+
+
 
 
 
