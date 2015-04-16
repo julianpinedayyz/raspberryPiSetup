@@ -94,11 +94,14 @@ Now that you know your ip address, let's make it static. Run these commands:
 4. Save your file and reboot `sudo reboot`
 
 
-##Update and Upgrade.
+##Update and Upgrade with apt-get
+
 At this point is probably a good idea to update and upgrade the system.  Run the following commands
 
 	sudo apt-get update
 	sudo apt-get upgrade
+	
+In case you want to know more about apt-get, [this](http://www.tecmint.com/useful-basic-commands-of-apt-get-and-apt-cache-for-package-management/) link is really useful.
 	
 ##Rpi-update first time: install git and certifications for reach github.
 
@@ -422,6 +425,9 @@ Because I have been running into some issues with Mongo, I decided to write a sm
 	````
 	sudo sh repair-mongo.sh
 	````
+	
+###Authentication
+In case you want to use authentication on your mongo database, follow [this](http://www.mkyong.com/mongodb/mongodb-authentication-example/) tutorial.
 
 ##Install zsh and oh-my-zsh (Optional)
 
@@ -449,8 +455,19 @@ Done.  You should be running the new theme by now.
 
 I like ti have a welcome banner on my pi.  I uploaded mine to this repo.  Feel free to use it. It is based on ZSH. It won't work with bash.
 
+###Remove Debian default message
 
+	sudo rm /etc/motd
+	sudo nano /etc/motd
 
+Now you should have a nice raspberry pi message every time that you ssh into your pi.
+
+###Useful links on zsh and bash
+
+- [Replacing Bash with ZSH on OSX](http://danny.is/writing/replacing-bash-with-zsh-141226)
+- [Moving from bash to zsh](http://askubuntu.com/questions/1577/moving-from-bash-to-zsh)
+- [dotfiles.org](dotfiles.org)
+- [Bash Profile Gist](https://gist.github.com/natelandau/10654137)
 
 ###More to come...
 
