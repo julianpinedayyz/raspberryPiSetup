@@ -123,6 +123,8 @@ In case you want to know more about apt-get, [this](http://www.tecmint.com/usefu
 	sudo reboot
 	
 ##Overclock your Pi
+**Note**: Update the firmware before overclocking!! Mandatory!
+
 Follow [This tutorial](http://haydenjames.io/raspberry-pi-2-overclock/) 
 
 ##Unattended-upgrades (Optional)
