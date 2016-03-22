@@ -386,7 +386,7 @@ Insert the following content into the file. We will have nginx deliver existing 
 
 Change `nodeLab` for the domain that suits your needs.
 
-	# the IP(s) on which your node server is running. I chose port 3000.
+	# the IP(s) on which your node server is running. I choose port 3000.
 	upstream app_nodeLab {
     	server 127.0.0.1:3000;
     	keepalive 8;
