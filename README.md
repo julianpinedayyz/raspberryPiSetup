@@ -517,7 +517,8 @@ I like ti have a welcome banner on my pi.  I uploaded mine to this repo.  Feel f
 ###Remove Debian default message
 
 	sudo rm /etc/motd
-	sudo nano /etc/motd
+	
+Copy `.zlogin` from this repo.
 
 Now you should have a nice raspberry pi message every time that you ssh into your pi.
 
