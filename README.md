@@ -490,6 +490,26 @@ Run `source ~/.zshrc` to start using the theme.
 	
 Done.  You should be running the new theme by now.
 
+##Open remote files on SublimeText 3
+
+1. On Sublime Text 3, open Package Manager (Ctrl-Shift-P on Linux/Win, Cmd-Shift-P on Mac, Install Package), and search for rsub
+2. Add `RemoteForward 52698 127.0.0.1:52698` to your .ssh/config file, or `-R 52698:localhost:52698` if you prefer command line
+3. On the remote server(Your pi):
+
+	````
+	sudo wget -O /usr/local/bin/sub https://raw.github.com/aurora/rmate/master/rmate
+	sudo chmod +x /usr/local/bin/sub
+	````
+4. Restart Sublime and reboot your Pi
+5. Lastly, run sub on the remote file you want to edit locally:
+
+   ````
+   sub ~/some_folder/some_file.txt
+   ````
+   The file now should open on Sublime
+
+For more info and credits see [here](http://log.liminastudio.com/writing/tutorials/sublime-tunnel-of-love-how-to-edit-remote-files-with-sublime-text-via-an-ssh-tunnel)
+
 ##SSH Welcome banner (Optional)
 
 I like ti have a welcome banner on my pi.  I uploaded mine to this repo.  Feel free to use it. It is based on ZSH. It won't work with bash.
