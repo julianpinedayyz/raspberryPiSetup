@@ -7,28 +7,28 @@ After repeating all these steps over and over, I decide to make this repo and ha
 
 After many tries, I found the best solution is to flash the SD Card and copy a Raspbian image **NOT** a NOOBS image. When using the NOOBS image, you'll get your card with weird partitions.  Here are the steps:
 
-1. Download [ApplePi-Baker](http://www.tweaking4all.com/downloads/raspberrypi/ApplePi-Baker-1.5.1.zip) and install it on your mac.  I'm using version 1.5.1.  This version was the one that worked for me.  This tool will help you to flash your card (NOOBS Recipe).
+1. Download [ApplePi-Baker](http://www.tweaking4all.com/hardware/raspberry-pi/macosx-apple-pi-baker/) and install the latest version on your mac.  This tool will help you to flash your card (NOOBS Recipe).
 2. Run ApplePi-Baker
 3. Insert your card.
 4. Press the refresh button 
 5. Your card should appear on the list.  Select the card.
-6. Run the first Recipe.  This will erase your card completely! Be careful!
-7. Download the latest Raspbian image from [their download page](http://www.raspberrypi.org/downloads/)
+6. Run the NOOBS Recipe.  This will erase your card completely! Be careful!
+7. Download the latest Raspbian image from [their download page](http://www.raspberrypi.org/downloads/). You can choose between the normal version or the Lite version. Because our server is going to be headless, I tend to install the **Lite** version.
 8. After the download finishes, uncompress the zip file somewhere you can locate it easily (i.e. your Desktop)
-9. After flashing your card, select your card again and run the second Recipe (IMG Recipe).  Make sure you select the file you just downloaded and then press IMG to SD Card.
+9. After flashing your card, select your card again and run the IMG Recipe.  Make sure you select the file you just downloaded and then press IMG to SD Card.
 10. After it finishes, eject your card and insert the card on your Pi.
 
 
 ##Raspi-config
 
-After the OS gets installed, the Pi will reboot and load raspi-config for the first time.  These are the steps that I normally follow:
+After the OS gets installed, the Pi will reboot and load raspi-config for the first time. With the Lite version, you need to run `sudo raspi-config`.  These are the steps that I normally follow:
 
 1. Expand Filesystem (Just in case)
 2. Change Internationalization Options to suit my needs:
-	+ Change Locale.
-  	+ Change Timezone.
-3. Enable SSH access.
-4. Change the hostname
+	+ Change Locale. (en_CA.UTF-8 UTF-8)
+  	+ Change Timezone. (America -> Toronto)
+3. Enable SSH access. (Advanced Options -> SSH)
+4. Change the hostname (Advanced Options -> Hostname)
 5. Enable SPI (if you have an Adafruit TFT)
 
 Select Finish and let the Pi reboot.
@@ -103,12 +103,14 @@ At this point is probably a good idea to update and upgrade the system.  Run the
 	
 In case you want to know more about apt-get, [this](http://www.tecmint.com/useful-basic-commands-of-apt-get-and-apt-cache-for-package-management/) link is really useful.
 	
-##Rpi-update first time: install git and certifications for reach github.
+##Rpi-update first time: install git and certifications to reach github.
 
 	sudo apt-get install ca-certificates
 	sudo apt-get install git-core
 	sudo wget http://goo.gl/1BOfJ -O /usr/bin/rpi-update
 	sudo chmod +x /usr/bin/rpi-update
+
+Check for git version `git --version`
 	
 ##Update firmware
 
@@ -200,7 +202,36 @@ If we exit our SSH session while there's a long build happening, then the build 
 If you want to SSH again and resume your session, you just need to run `screen -r`. After the process has ended, you can exit the session and terminate it just by typing `exit`.  You can have multiple sessions and terminate them.  You can find more info about that [here](http://www.tecmint.com/screen-command-examples-to-manage-linux-terminals/).
 	
 
-##Install node.js (latest version 04/04/2015)
+##Install node.js (latest version 03/21/2016)
+I found a new way to install the latest version (5.7.0). If the next instructions don't work, follow the long install.
+
+###Short install
+With this installation, I'm going to use **nvm** to manage node.js installations.
+
+1. run the following:
+
+	````
+	curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.31.0/install.sh | bash
+	````
+	After running the above, reboot your pi and ssh again to it.
+
+2. Now, let's install the latest version of node (v5.7.0)
+
+	````
+	nvm install v5.7.0
+	nvm alias default v5.7.0
+	````
+
+3. Symlink your version
+
+	````
+	sudo ln -s /home/pi/.nvm/versions/node/v5.7.0/bin/node /usr/bin/node
+	sudo ln -s /home/pi/.nvm/versions/node/v5.7.0/bin/npm /usr/bin/npm
+	````
+	
+Follow [this](https://www.getstructure.io/blog/how-to-install-nodejs-on-raspberry-pi) tutorial for more info on the above and updating node versions. Credits to [Brandon Cannaday](https://twitter.com/TheReddest)
+
+###Long Install
 After trying many tutorials, I have found that this is the most reliable way to install node.js on the pi.  You can also follow [this tutorial](http://elinux.org/Node.js_on_RPi).
 
 1. Create install-node.sh 
@@ -211,9 +242,9 @@ After trying many tutorials, I have found that this is the most reliable way to 
 2. Paste the code bellow (change node version if needed.  I'm installing the latest as of this date)
 	
 	````
-	wget http://nodejs.org/dist/v0.12.2/node-v0.12.2.tar.gz
-	tar -xzf node-v0.12.2.tar.gz
-	cd node-v0.12.2
+	wget https://nodejs.org/dist/v4.4.0/node-v4.4.0.tar.gz
+	tar -xzf node-v4.4.0.tar.gz
+	cd node-v4.4.0
 	./configure
 	make
 	sudo make install
@@ -226,17 +257,21 @@ After trying many tutorials, I have found that this is the most reliable way to 
 4. After completing the installation, check your node.js version:
 
 	````
-	node -v										# Should print v0.12.2
+	node -v										# Should print v4.4.0
 	````
 5. Check npm version:
 
 	````
-	npm -v										# Should print 2.7.4
+	npm -v										# Should print v3.6.0
 	````
 	
 At this point you should be able to test the node server.  Download the `nodeLab` folder from this repo and place it on your home folder `/home/pi/nodeLab`. CD into your nodeLab folder and run `node server.js` (You need to install all the required `npm` packages first.)  You should see something like this on your prompt:
 
 	Simple static server listening on port 3000
+	
+###Update npm version
+1. Check for outdated global packages `npm outdated -g --depth=0`
+2. If npm is outdated, run `npm install npm -g`
 	
 ##Backup your SD Card
 At this point I like to back up my SD Card and save an image I can re-use at any time.  If using the same image on another Pi, have in mind that you should change the host name running `sudo raspi-config`.
