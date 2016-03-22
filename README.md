@@ -486,6 +486,8 @@ Find the line ZSH_THEME="..." and change it for
 	
 	ZSH_THEME="miroamarillo"
 	
+Run `source ~/.zshrc` to start using the theme.
+	
 Done.  You should be running the new theme by now.
 
 ##SSH Welcome banner (Optional)
