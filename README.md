@@ -108,6 +108,31 @@ Now that you know your ip address, let's make it static. Run these commands:
 4. Save your file and reboot `sudo reboot`
 
 
+##Set a Static IP Address for your pi (Version 3 Wireless)
+
+Now that you know your ip address, let's make it static. Run these commands:
+
+1. `sudo nano /etc/network/interfaces`
+2. Find this line `iface eth0 inet dhcp` and comment it in case you want to revert.
+3. At the end of the file add these lines:
+
+	````
+	iface wlan0 inet static
+	address 192.168.1.122					#IP of your pi
+	netmask 255.255.255.0					#netmask from your router
+	network 192.168.1.0						#network from your router
+	broadcast 192.168.1.255					#broadcast from your router
+	gateway 192.168.1.1						#this is normally the IP of your router
+	wpa-essid your_network_name
+    wpa-psk your_password
+	````
+	
+	The *address* IP setting will be the IP address you wish to specify as static on your network.  The *gateway*, *netmask*, *network* and *broadcast* IP addresses are dependent on your network and can be obtained from the router.
+	
+4. Save your file and reboot `sudo reboot`
+
+
+
 ##Update and Upgrade with apt-get
 
 At this point is probably a good idea to update and upgrade the system.  Run the following commands
