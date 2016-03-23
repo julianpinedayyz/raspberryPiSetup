@@ -85,6 +85,8 @@ Go to the bottom of the file and add the following:
 
 After saving the file, reboot `sudo reboot`
 
+Article and [Credits](https://www.raspberrypi.org/documentation/configuration/wireless/wireless-cli.md)
+
 
 ##Set a Static IP Address for your pi
 
