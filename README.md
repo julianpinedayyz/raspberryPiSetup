@@ -140,6 +140,11 @@ At this point is probably a good idea to update and upgrade the system.  Run the
 	sudo apt-get update
 	sudo apt-get upgrade
 	
+For the respberry pi 3
+
+	sudo apt-get update
+	sudo apt-get dist-upgrade
+	
 In case you want to know more about apt-get, [this](http://www.tecmint.com/useful-basic-commands-of-apt-get-and-apt-cache-for-package-management/) link is really useful.
 	
 ##Rpi-update first time: install git and certifications to reach github.
