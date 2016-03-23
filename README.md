@@ -72,6 +72,20 @@ Once they're installed, you can try mounting the pi following these steps:
 2. Create an empty folder that will map to your drive.  In mi case `mkdir raspberryPi`
 3. Now that you know your Pi IP (mine is 192.168.1.116) you can mount the home folder as an external drive.  Run `sshfs pi@192.168.1.116: raspberryPi`. The second argument is the folder you created above.  If you go to your finder, on your home folder you will see something like "OSXFUSE Volumen 2 sshfs". That's your home folder from your pi.  At this point you can move files from your mac to your pi.  You can even develop your apps on your mac and run them on your pi.
 
+##Connect to the wireless network (Raspberry Pi 3)- Optional step.
+
+	sudo nano /etc/wpa_supplicant/wpa_supplicant.conf
+	
+Go to the bottom of the file and add the following:
+
+	network={
+    	ssid="testing"
+    	psk="testingPassword"
+	}
+
+After saving the file, reboot `sudo reboot`
+
+
 ##Set a Static IP Address for your pi
 
 Now that you know your ip address, let's make it static. Run these commands:
