@@ -322,7 +322,7 @@ At this point I like to back up my SD Card and save an image I can re-use at any
 
 Again, I use [ApplePi-Baker](http://www.tweaking4all.com/downloads/raspberrypi/ApplePi-Baker-1.5.1.zip) to flash my SD cards and copy my backup image to them.  The third recipe is meant for backing up your image.
 
-##SHHD Disable Password login
+##SSH Disable Password login
 
 Now that I can login with my private key, I want to ONLY login with it.  If you want the same, follow the next steps:
 
