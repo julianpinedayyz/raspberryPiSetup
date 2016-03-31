@@ -485,6 +485,10 @@ Double check that there's only one enabled site (in this case nodeLab) on your `
 
 ##Install Mongodb without building it
 
+###Update
+The upcoming instructions do not work anymore.  Please follow [this](http://andyfelong.com/2016/01/mongodb-3-0-9-binaries-for-raspberry-pi-2-jessie/) tutorial.
+
+####Not working instructions (binaries are not available anymore)
 You can follow [this tutorial](http://blog.rongzou.us/?p=118).  And here are a couple of links that will help you solve issues if you have them.  [This one](http://stackoverflow.com/questions/12831939/couldnt-connect-to-server-127-0-0-127017) and [this one](https://ni-c.github.io/heimcontrol.js/get-started.html).
 
 Because I have been running into some issues with Mongo, I decided to write a small bash script to repair it:
@@ -508,8 +512,6 @@ Because I have been running into some issues with Mongo, I decided to write a sm
 	````
 	sudo sh repair-mongo.sh
 	````
-###Update
-The previous instructions do not work anymore.  Please follow [this](http://andyfelong.com/2016/01/mongodb-3-0-9-binaries-for-raspberry-pi-2-jessie/) tutorial.
 	
 ###Authentication
 In case you want to use authentication on your mongo database, follow [this](http://www.mkyong.com/mongodb/mongodb-authentication-example/) tutorial.
