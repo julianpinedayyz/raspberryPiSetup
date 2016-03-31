@@ -83,7 +83,7 @@ Go to the bottom of the file and add the following:
     	psk="testingPassword"
 	}
 
-After saving the file, reboot `sudo reboot`
+After saving the file, reboot `sudo reboot` or `sudo shutdown -r now` or `sudo shutdown -r now`
 
 Article and [Credits](https://www.raspberrypi.org/documentation/configuration/wireless/wireless-cli.md)
 
@@ -107,7 +107,7 @@ Now that you know your ip address, let's make it static. Run these commands:
 	
 	The *address* IP setting will be the IP address you wish to specify as static on your network.  The *gateway*, *netmask*, *network* and *broadcast* IP addresses are dependent on your network and can be obtained from the router.
 	
-4. Save your file and reboot `sudo reboot`
+4. Save your file and reboot `sudo reboot` or `sudo shutdown -r now`
 
 
 ##Set a Static IP Address for your pi (Version 3 Wireless)
@@ -131,7 +131,7 @@ Now that you know your ip address, let's make it static. Run these commands:
 	
 	The *address* IP setting will be the IP address you wish to specify as static on your network.  The *gateway*, *netmask*, *network* and *broadcast* IP addresses are dependent on your network and can be obtained from the router.
 	
-4. Save your file and reboot `sudo reboot`
+4. Save your file and reboot `sudo reboot` or `sudo shutdown -r now`
 
 
 
@@ -508,6 +508,8 @@ Because I have been running into some issues with Mongo, I decided to write a sm
 	````
 	sudo sh repair-mongo.sh
 	````
+###Update
+The previous instructions do not work anymore.  Please follow [this](http://andyfelong.com/2016/01/mongodb-3-0-9-binaries-for-raspberry-pi-2-jessie/) tutorial.
 	
 ###Authentication
 In case you want to use authentication on your mongo database, follow [this](http://www.mkyong.com/mongodb/mongodb-authentication-example/) tutorial.
