@@ -1,16 +1,16 @@
 # raspberryPiSetup
 Initial setup and steps to get a raspberry pi up and running.
 
-After repeating all these steps over and over, I decide to make this repo and have all the steps clear so anyone can repeat then and get their raspberry pi up and running.  I will be setting up a MEAN environment using Nginx and some other tools to make life easier.  The hole purpose 
+After repeating all these steps over and over, I decide to make this repo and have all the steps clear so anyone can repeat then and get their raspberry pi up and running.  I will be setting up a MEAN environment using Nginx and some other tools to make life easier.  The hole purpose
 
-##Setup SD Card with Raspbian
+## Setup SD Card with Raspbian
 
 After many tries, I found the best solution is to flash the SD Card and copy a Raspbian image **NOT** a NOOBS image. When using the NOOBS image, you'll get your card with weird partitions.  Here are the steps:
 
 1. Download [ApplePi-Baker](http://www.tweaking4all.com/hardware/raspberry-pi/macosx-apple-pi-baker/) and install the latest version on your mac.  This tool will help you to flash your card (NOOBS Recipe).
 2. Run ApplePi-Baker
 3. Insert your card.
-4. Press the refresh button 
+4. Press the refresh button
 5. Your card should appear on the list.  Select the card.
 6. Run the NOOBS Recipe.  This will erase your card completely! Be careful!
 7. Download the latest Raspbian image from [their download page](http://www.raspberrypi.org/downloads/). You can choose between the normal version or the Lite version. Because our server is going to be headless, I tend to install the **Lite** version.
@@ -19,7 +19,7 @@ After many tries, I found the best solution is to flash the SD Card and copy a R
 10. After it finishes, eject your card and insert the card on your Pi.
 
 
-##Raspi-config
+## Raspi-config
 
 After the OS gets installed, the Pi will reboot and load raspi-config for the first time. With the Lite version, you need to run `sudo raspi-config`.  These are the steps that I normally follow:
 
@@ -33,11 +33,11 @@ After the OS gets installed, the Pi will reboot and load raspi-config for the fi
 
 Select Finish and let the Pi reboot.
 
-##Find the Pi IP address
+## Find the Pi IP address
 
 After rebooting, find the ip of your Pi by running `ifconfig`.  Look for this line `inet addr:192.168.1.116`.  In this case, my IP is 192.168.1.116.  Now I want to set that as a static IP for my Pi.  This step can also be done in the router config.  I do it in both places (router and pi) just to be safe.
 
-##Enable SSH Without password (Public Key)
+## Enable SSH Without password (Public Key)
 
 Now we need to ssh into the pi without entering a password. Follow these steps:
 
@@ -47,9 +47,9 @@ Now we need to ssh into the pi without entering a password. Follow these steps:
 4. Exit the Pi `exit`
 5. Go to the folder where your public key was stored `cd ~/.ssh`
 5. Transfer your public key to your pi `scp id_rsa.pub pi@IPAddress:.ssh/authorized_keys`
-6. Exit the Pi `exit` and SSH again into it.  You should not need to enter the password anymore. 
+6. Exit the Pi `exit` and SSH again into it.  You should not need to enter the password anymore.
 
-##Install [OSXFuse](http://osxfuse.github.io/), [SSHFS](http://osxfuse.github.io/) and [fuse-ext2](http://sourceforge.net/projects/fuse-ext2/)
+## Install [OSXFuse](http://osxfuse.github.io/), [SSHFS](http://osxfuse.github.io/) and [fuse-ext2](http://sourceforge.net/projects/fuse-ext2/)
 
 While the previous transfer takes place, I like to install on my mac OSXFuse, SSHFS and fuse-ext2.  This has to be done once.  After installing these 3 applications, you will be able to mount your pi as a drive.  When installing OSXFuse, make sure to check: MacFUSE Compatibility Layer. This will be handy to mount any SD card with an actual OS to your mac. Download and install [fuse-ext2](http://sourceforge.net/projects/fuse-ext2/).  After the installation, open a terminal session and follow these steps:
 
@@ -72,10 +72,10 @@ Once they're installed, you can try mounting the pi following these steps:
 2. Create an empty folder that will map to your drive.  In mi case `mkdir raspberryPi`
 3. Now that you know your Pi IP (mine is 192.168.1.116) you can mount the home folder as an external drive.  Run `sshfs pi@192.168.1.116: raspberryPi`. The second argument is the folder you created above.  If you go to your finder, on your home folder you will see something like "OSXFUSE Volumen 2 sshfs". That's your home folder from your pi.  At this point you can move files from your mac to your pi.  You can even develop your apps on your mac and run them on your pi.
 
-##Connect to the wireless network (Raspberry Pi 3)- Optional step.
+## Connect to the wireless network (Raspberry Pi 3)- Optional step.
 
 	sudo nano /etc/wpa_supplicant/wpa_supplicant.conf
-	
+
 Go to the bottom of the file and add the following:
 
 	network={
@@ -88,7 +88,7 @@ After saving the file, reboot `sudo reboot` or `sudo shutdown -r now` or `sudo s
 Article and [Credits](https://www.raspberrypi.org/documentation/configuration/wireless/wireless-cli.md)
 
 
-##Set a Static IP Address for your pi
+## Set a Static IP Address for your pi
 
 Now that you know your ip address, let's make it static. Run these commands:
 
@@ -104,13 +104,13 @@ Now that you know your ip address, let's make it static. Run these commands:
 	broadcast 192.168.1.255					#broadcast from your router
 	gateway 192.168.1.1						#this is normally the IP of your router
 	````
-	
+
 	The *address* IP setting will be the IP address you wish to specify as static on your network.  The *gateway*, *netmask*, *network* and *broadcast* IP addresses are dependent on your network and can be obtained from the router.
-	
+
 4. Save your file and reboot `sudo reboot` or `sudo shutdown -r now`
 
 
-##Set a Static IP Address for your pi (Version 3 Wireless)
+## Set a Static IP Address for your pi (Version 3 Wireless)
 
 Now that you know your ip address, let's make it static. Run these commands:
 
@@ -128,28 +128,28 @@ Now that you know your ip address, let's make it static. Run these commands:
 	wpa-essid your_network_name
     wpa-psk your_password
 	````
-	
+
 	The *address* IP setting will be the IP address you wish to specify as static on your network.  The *gateway*, *netmask*, *network* and *broadcast* IP addresses are dependent on your network and can be obtained from the router.
-	
+
 4. Save your file and reboot `sudo reboot` or `sudo shutdown -r now`
 
 
 
-##Update and Upgrade with apt-get
+## Update and Upgrade with apt-get
 
 At this point is probably a good idea to update and upgrade the system.  Run the following commands
 
 	sudo apt-get update
 	sudo apt-get upgrade
-	
+
 For the respberry pi 3
 
 	sudo apt-get update
 	sudo apt-get dist-upgrade
-	
+
 In case you want to know more about apt-get, [this](http://www.tecmint.com/useful-basic-commands-of-apt-get-and-apt-cache-for-package-management/) link is really useful.
-	
-##Rpi-update first time: install git and certifications to reach github.
+
+## Rpi-update first time: install git and certifications to reach github.
 
 	sudo apt-get install ca-certificates
 	sudo apt-get install git-core
@@ -157,25 +157,25 @@ In case you want to know more about apt-get, [this](http://www.tecmint.com/usefu
 	sudo chmod +x /usr/bin/rpi-update
 
 Check for git version `git --version`
-	
-##Update firmware
+
+## Update firmware
 
 	sudo rpi-update
 	sudo ldconfig
 	sudo reboot
-	
-##Rpi-update after
+
+## Rpi-update after
 
 	sudo rpi-update
 	sudo ldconfig
 	sudo reboot
-	
-##Overclock your Pi
+
+## Overclock your Pi
 **Note**: Update the firmware before overclocking!! Mandatory!
 
-Follow [This tutorial](http://haydenjames.io/raspberry-pi-2-overclock/) 
+Follow [This tutorial](http://haydenjames.io/raspberry-pi-2-overclock/)
 
-##Unattended-upgrades (Optional)
+## Unattended-upgrades (Optional)
 
 The `unattended-upgrades` package is the way to automate updating the OS in these debian-family distributions.  Follow these instructions:
 
@@ -184,7 +184,7 @@ The `unattended-upgrades` package is the way to automate updating the OS in thes
 	````
 	sudo apt-get install unattended-upgrades
 	````
-	
+
 2. Create the file:
 
 	````
@@ -200,11 +200,11 @@ The `unattended-upgrades` package is the way to automate updating the OS in thes
 	APT::Periodic::Unattended-Upgrade "1";
 	````
 	The above configuration updates the package list, downloads, and installs available upgrades every day. The local download archive is cleaned every week.
-	
+
 	The results of unattended-upgrades will be logged to `/var/log/unattended-upgrades`
-	 
-	
-##Install apticron (Optional)
+
+
+## Install apticron (Optional)
 
 To follow this step you need to install SSMTP first.  [Follow this tutorial](http://iqjar.com/jar/sending-emails-from-the-raspberry-pi/)
 
@@ -218,27 +218,27 @@ Configure it to send you messages:
 
 	sudo nano /etc/apticron/apticron.conf
 	EMAIL="root@example.com"
-	
+
 Configure it to run once a week: [Follow these steps](http://www.sysadminworld.com/2012/how-to-run-apticron-only-once-a-week/). This [link](http://www.cyberciti.biz/faq/how-do-i-add-jobs-to-cron-under-linux-or-unix-oses/) is also useful to know more about cron jobs.
 
 Test it:
 
 	sudo apticron
-	
+
 Some things that you will find on the message if there's an update:
 
 You can perform the upgrade by issuing the command:
 
 	aptitude dist-upgrade
-	
+
 The upgrade may be simulated by issuing the command:
 
 	aptitude -s -y dist-upgrade
-	
+
 Useful stuff.
 
 
-##Install screen (Optional but really useful)
+## Install screen (Optional but really useful)
 
 If we exit our SSH session while there's a long build happening, then the build will stop causing some breakage.  We don't want that.  We can solve that problem with screen.  Screen will let you run long builds and resume later when you SSH again to your Pi.  Is like running task in the background of your Pi.  After installing it, you could run the node.js installation using screen.  Here are the steps:
 
@@ -246,12 +246,12 @@ If we exit our SSH session while there's a long build happening, then the build 
 2. After the installation, run `screen` to start a screen session.  You'll get a new terminal window.  From that terminal window you can run the node.js installation bellow and forget about broken pipes.
 
 If you want to SSH again and resume your session, you just need to run `screen -r`. After the process has ended, you can exit the session and terminate it just by typing `exit`.  You can have multiple sessions and terminate them.  You can find more info about that [here](http://www.tecmint.com/screen-command-examples-to-manage-linux-terminals/).
-	
 
-##Install node.js (latest version 03/21/2016)
+
+## Install node.js (latest version 03/21/2016)
 I found a new way to install the latest version (5.7.0). If the next instructions don't work, follow the long install.
 
-###Short install
+### Short install
 With this installation, I'm going to use **nvm** to manage node.js installations.
 
 1. run the following:
@@ -274,19 +274,19 @@ With this installation, I'm going to use **nvm** to manage node.js installations
 	sudo ln -s /home/pi/.nvm/versions/node/v5.7.0/bin/node /usr/bin/node
 	sudo ln -s /home/pi/.nvm/versions/node/v5.7.0/bin/npm /usr/bin/npm
 	````
-	
+
 Follow [this](https://www.getstructure.io/blog/how-to-install-nodejs-on-raspberry-pi) tutorial for more info on the above and updating node versions. Credits to [Brandon Cannaday](https://twitter.com/TheReddest)
 
-###Long Install
+### Long Install
 After trying many tutorials, I have found that this is the most reliable way to install node.js on the pi.  You can also follow [this tutorial](http://elinux.org/Node.js_on_RPi).
 
-1. Create install-node.sh 
+1. Create install-node.sh
 
 	````
 	nano install-node.sh
 	````
 2. Paste the code bellow (change node version if needed.  I'm installing the latest as of this date)
-	
+
 	````
 	wget https://nodejs.org/dist/v4.4.0/node-v4.4.0.tar.gz
 	tar -xzf node-v4.4.0.tar.gz
@@ -310,27 +310,27 @@ After trying many tutorials, I have found that this is the most reliable way to 
 	````
 	npm -v										# Should print v3.6.0
 	````
-	
+
 At this point you should be able to test the node server.  Download the `nodeLab` folder from this repo and place it on your home folder `/home/pi/nodeLab`. CD into your nodeLab folder and run `node server.js` (You need to install all the required `npm` packages first.)  You should see something like this on your prompt:
 
 	Simple static server listening on port 3000
-	
-###Update npm version
+
+### Update npm version
 1. Check for outdated global packages `npm outdated -g --depth=0`
 2. If npm is outdated, run `npm install npm -g`
-	
-##Backup your SD Card
+
+## Backup your SD Card
 At this point I like to back up my SD Card and save an image I can re-use at any time.  If using the same image on another Pi, have in mind that you should change the host name running `sudo raspi-config`.
 
 Again, I use [ApplePi-Baker](http://www.tweaking4all.com/downloads/raspberrypi/ApplePi-Baker-1.5.1.zip) to flash my SD cards and copy my backup image to them.  The third recipe is meant for backing up your image.
 
-##SSH Disable Password login
+## SSH Disable Password login
 
 Now that I can login with my private key, I want to ONLY login with it.  If you want the same, follow the next steps:
 
 1. Run `sudo nano /etc/ssh/sshd_config`
 2. Change `PermitRootLogin yes` to `PermitRootLogin no`
-3. Look for `PasswordAuthentication yes` It should be commented.  Uncomment it and change the value to NO.  Like this `PasswordAuthentication no` 
+3. Look for `PasswordAuthentication yes` It should be commented.  Uncomment it and change the value to NO.  Like this `PasswordAuthentication no`
 
 I like commenting the lines I'll be changing and creating a new one with my changes in case I want to revert.  My file looks like this:
 
@@ -340,92 +340,92 @@ I like commenting the lines I'll be changing and creating a new one with my chan
 	.
 	.
 	.
-	# Change to no to disable tunnelled clear text password 
+	# Change to no to disable tunnelled clear text password
 	#Disable Password logins
 	#PasswordAuthentication yes
 	PasswordAuthentication no
-	
+
 I like it ;)
 
-##Update Git to the latest version
+## Update Git to the latest version
 
 	 sudo nano /etc/apt/sources.list
 
 Add this line at the end of the file:
 
 	deb http://http.debian.net/debian wheezy-backports main
-	
-Run `sudo apt-get update`.  You should get an error saying theres a missing key.  Something like this: 
+
+Run `sudo apt-get update`.  You should get an error saying theres a missing key.  Something like this:
 
 	W: GPG error: http://mozilla.debian.net  ......   : NO_PUBKEY 85A3D26506C4AE2A
-	
+
 Copy the public key number and run this making sure to replace yours with the one of this example:
 
 	gpg --keyserver pgpkeys.mit.edu --recv-key 85A3D26506C4AE2A
 	gpg -a --export 85A3D26506C4AE2A | sudo apt-key add -
-	
+
 run `sudo apt-get update` again. Now you shouldn't get an error.
 
 Now run:
 
 	sudo apt-get -t wheezy-backports install git
-	
+
 That should do the trick.  You should be running the latest git for your version of Linux (Debian) After upgrading, I like to comment the source that I added to the source.list file just because the versions you get from backports sometimes are not stable.
 
 	sudo reboot
 
 
-##Install Watchdog
+## Install Watchdog
 
 Its purpose is to automatically restart the raspberry pi if it becomes unresponsive.
 
 	sudo apt-get install watchdog
 	sudo modprobe bcm2708_wdog
-	
+
 Edit modules file:
 
 	sudo nano /etc/modules
 	##add the line bellow to the end of the file
 	bcm2708_wdog
-	
+
 Add watchdog to startup applications:
 
 	sudo update-rc.d watchdog defaults
-	
+
 edit watchdog config file
 
 	sudo nano /etc/watchdog.conf
-	
+
 	#uncomment the following:
 	max-load-1
 	watchdog-device
 
 Restart watchdog with:
-	
+
 	sudo service watchdog restart
-	
+
 You can also run these commands to check its status, stop it and start it:
 
 	sudo service watchdog status
 	sudo service watchdog stop
 	sudo service watchdog start
-	
-##Install nginx
+
+## Install nginx
 
 	sudo apt-get install nginx
-	
+
 Make sure to start the service and try to see something via network
 
 	sudo service nginx start
-	
+
 Go to the IP address of your Pi on a browser (In my case http://192.168.1.116/) and you will see the Nginx Welcome message "Welcome to nginx!"
 
-##Configure nginx for node.js hosting
+## Configure nginx for node.js hosting
 
 Create a site for your domain (example uses `nodeLab` for a name)
 
 	sudo nano /etc/nginx/sites-available/nodeLab
-	
+
 This is where we configure nginx to send any requests to the node.js app later on.
 
 Insert the following content into the file. We will have nginx deliver existing files right away, everything else will be sent to node.
@@ -447,7 +447,7 @@ Change `nodeLab` for the domain that suits your needs.
 	    index index.html;
 	    charset utf8;
 	    sendfile off;
-	
+
 	    # pass the request to the node.js server with the correct headers
 	    # and much more can be added, see nginx config options
 	    location / {
@@ -456,7 +456,7 @@ Change `nodeLab` for the domain that suits your needs.
 	      proxy_set_header Host $http_host;
 	      proxy_set_header X-NginX-Proxy true;
 	      proxy_redirect off;
-	
+
 	        # these are denied
 	        location ~ \.(php|inc|conf|bak|tmp|htaccess|htpasswd)$ {
 	            deny all;
@@ -478,17 +478,17 @@ Now enable the site
 Restart nginx
 
 	sudo service nginx restart
-	
+
 At this point if you create a simple node project you will be able to see it on your Pi IP address on port 3000.
 
 Double check that there's only one enabled site (in this case nodeLab) on your `sites-enabled` folder.  If for any reason there's a `default` site in that folder, nginx will serve that default site on port 80 and your `nodeLab` site on port 3000.  If you delete the default site, nginx will forward port 3000 to port 80 and you will be able to see your app just by typing your IP address without the port.  This comes useful if you want to later forward a public IP address to your app and make it public.
 
-##Install Mongodb without building it
+## Install Mongodb without building it
 
-###Update
+### Update
 The upcoming instructions do not work anymore.  Please follow [this](http://andyfelong.com/2016/01/mongodb-3-0-9-binaries-for-raspberry-pi-2-jessie/) tutorial.
 
-####Not working instructions (binaries are not available anymore)
+#### Not working instructions (binaries are not available anymore)
 You can follow [this tutorial](http://blog.rongzou.us/?p=118).  And here are a couple of links that will help you solve issues if you have them.  [This one](http://stackoverflow.com/questions/12831939/couldnt-connect-to-server-127-0-0-127017) and [this one](https://ni-c.github.io/heimcontrol.js/get-started.html).
 
 Because I have been running into some issues with Mongo, I decided to write a small bash script to repair it:
@@ -512,11 +512,11 @@ Because I have been running into some issues with Mongo, I decided to write a sm
 	````
 	sudo sh repair-mongo.sh
 	````
-	
+
 ###Authentication
 In case you want to use authentication on your mongo database, follow [this](http://www.mkyong.com/mongodb/mongodb-authentication-example/) tutorial.
 
-##Install zsh and oh-my-zsh (Optional)
+## Install zsh and oh-my-zsh (Optional)
 
 	sudo apt-get install zsh
 	wget https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh -O - | sh
@@ -533,14 +533,14 @@ Activate the theme:
 	nano ~/.zshrc
 
 Find the line ZSH_THEME="..." and change it for
-	
+
 	ZSH_THEME="miroamarillo"
-	
+
 Run `source ~/.zshrc` to start using the theme.
-	
+
 Done.  You should be running the new theme by now.
 
-##Open remote files on SublimeText 3
+## Open remote files on SublimeText 3
 
 1. On Sublime Text 3, open Package Manager (Ctrl-Shift-P on Linux/Win, Cmd-Shift-P on Mac, Install Package), and search for rsub
 2. Add `RemoteForward 52698 127.0.0.1:52698` to your .ssh/config file, or `-R 52698:localhost:52698` if you prefer command line
@@ -564,15 +564,17 @@ For more info and credits see [here](http://log.liminastudio.com/writing/tutoria
 
 I like ti have a welcome banner on my pi.  I uploaded mine to this repo.  Feel free to use it. It is based on ZSH. It won't work with bash.
 
-###Remove Debian default message
+### Remove Debian default message
 
-	sudo rm /etc/motd
-	
+  ```
+  sudo rm /etc/motd
+  ```
+
 Copy `.zlogin` from this repo.
 
 Now you should have a nice raspberry pi message every time that you ssh into your pi.
 
-###Useful links on zsh and bash
+### Useful links on zsh and bash
 
 - [Replacing Bash with ZSH on OSX](http://danny.is/writing/replacing-bash-with-zsh-141226)
 - [Moving from bash to zsh](http://askubuntu.com/questions/1577/moving-from-bash-to-zsh)
@@ -580,10 +582,3 @@ Now you should have a nice raspberry pi message every time that you ssh into you
 - [Bash Profile Gist](https://gist.github.com/natelandau/10654137)
 
 ###More to come...
-
-
-
-
-
-
-
